@@ -8,7 +8,7 @@ Include Basic stuff like:
 4. Dynamic Allocation that has presented with my version for appointment diary
 5. Handling Files include all popular API's and the use of read and write in binary mode
 
-Include all data structuers in genric form: Vector, Stack, Queue, Tree, Double List: include listr itrators and list function in separate mudles in order to hide the List struct, Heap and Hash Map.
+Include all data structuers in genric form: Vector, Stack, Queue, Tree, Double List: include listr iterators and list function in separate mudles in order to hide the List struct, Heap and Hash Map.
 
 Of course a lot of projects include example of popular use of each of them and popular interview questions
 (currently not all upload to this site, in the near future it will complete)

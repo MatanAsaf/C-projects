@@ -60,17 +60,17 @@ typedef struct Map_Stats {
 
 
 /*----------------------------------------------------------------------------*/
-typedef size_t (*HashFunction)(const void* _key);
+typedef size_t (*HashFunction)(void* _key);
 /*----------------------------------------------------------------------------*/
 
 
 /*----------------------------------------------------------------------------*/
-typedef int (*EqualityFunction)(const void* _firstKey, const void* _secondKey);
+typedef int (*EqualityFunction)(void* _firstKey, void* _secondKey);
 /*----------------------------------------------------------------------------*/
 
 
 /*----------------------------------------------------------------------------*/
-typedef int	(*KeyValueActionFunction)(const void* _key, void* _value, void* _context);
+typedef int	(*KeyValueActionFunction)(void* _key, void* _value, void* _context);
 /*----------------------------------------------------------------------------*/
 
 
@@ -115,27 +115,6 @@ void HashMap_Destroy(HashMap** _map, void (*_keyDestroy)(void* _key), void (*_va
 
 /*----------------------------------------------------------------------------*/
 /** 
- * @brief 		Adjust map capacity and rehash all key/value pairs
- * @details		Adjust map capacity so it can now have different size of buckets to stored key/value pairs
- *
- * @param[in] 	_map					= 	Existing map
- * @param[in] 	_newCapacity			= 	New capacity size
- * 						          			Will be rounded to nearest larger prime number.
- *
- * @return		Status MapResult that indicate in which state the function ended:
- *
- * @retval  	MAP_SUCCESS    			=   On success
- * @retval  	MAP_UNINITIALIZED_ERROR =   On failure due to uninitialized map pointer OR newCapacity
- * @retval  	MAP_ALLOCATION_ERROR    =   On failure due to allocation failure 
- *
- * @warning 	newCapacity must be > 0
- */
-MapResult HashMap_Rehash(HashMap *_map, size_t newCapacity);
-/*----------------------------------------------------------------------------*/
-
-
-/*----------------------------------------------------------------------------*/
-/** 
  * @brief 		Insert a key-value pair into the hash map.
  *
  * @param[in] 	_map					=	Hash map to insert to, must be initialized
@@ -152,7 +131,7 @@ MapResult HashMap_Rehash(HashMap *_map, size_t newCapacity);
  * 
  * @warning 	Key must be unique and distinct
  */
-MapResult HashMap_Insert(HashMap* _map, const void* _key, const void* _value);
+MapResult HashMap_Insert(HashMap* _map, void* _key, void* _value);
 /*----------------------------------------------------------------------------*/
 
 
@@ -176,7 +155,7 @@ MapResult HashMap_Insert(HashMap* _map, const void* _key, const void* _value);
  * 
  * @warning 	Key must be unique and distinct
  */
-MapResult HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pKey, void** _pValue);
+MapResult HashMap_Remove(HashMap* _map, void* _searchKey, void** _pKey, void** _pValue);
 /*----------------------------------------------------------------------------*/
 
 
@@ -199,7 +178,7 @@ MapResult HashMap_Remove(HashMap* _map, const void* _searchKey, void** _pKey, vo
  * 
  * @warning 	Key must be unique and distinct
  */
-MapResult HashMap_Find(const HashMap* _map, const void* _searchKey, void** _pValue);
+MapResult HashMap_Find(const HashMap* _map, void* _searchKey, void** _pValue);
 /*----------------------------------------------------------------------------*/
 
 
@@ -257,6 +236,27 @@ size_t HashMap_ForEach(const HashMap* _map, KeyValueActionFunction _action, void
  * @warning 	Each time the user call this Function it create a new MapStats structure
  */
 MapStats* HashMap_GetStatistics(const HashMap* _map);
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/** 
+ * @brief 		Iterate over all key-value pairs in the map and call a print function for each pair
+ * @details 	The user provided KeyValueActionFunction for print the elements, 
+ *				the function will print the bucket itself.  
+ * 				Iteration will stop if the called function returns a zero for a given pair
+ * 
+ * @param[in]	_map					=	Hash map to iterate over.
+ * @param[in] 	_action					=	User provided print function pointer to be invoked for each element
+ * @param[in] 	_context				=	User provided element pointer to be invoked for each element
+ *
+ * @returns 	Number of times the user functions was invoked:
+ *
+ * @retval  	0    					=   On failure due to uninitialized one of the pointers OR 
+ *											On success with empty hash
+ * @retval  	Number    				=   On success without empty hash
+ */
+size_t HashMap_Print(const HashMap* _map, KeyValueActionFunction _action, void* _context);
 /*----------------------------------------------------------------------------*/
 
 
